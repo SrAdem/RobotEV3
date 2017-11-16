@@ -1,52 +1,61 @@
+import lejos.hardware.Battery;
 import lejos.hardware.Button;
 import lejos.utility.Delay;
 
 public class Main {
 
 	public static void main(String[] args) throws InterruptedException {
-		Actionneurs actionneur = new Actionneurs();
-		boolean Pasgrandchose = false;
+		ActionRobot robotAction = new ActionRobot();
+		BattleStates battleStates = new BattleStates();
+		Battery battery = new Battery();
+		
+		System.out.println(battery.getVoltage());
 		
 //		while (!actionneur.getCapteurs().buttonIsPressed()) {
 //		System.out.println(actionneur.getCapteurs().getDistance());
 //	}
 		
-		//detecter l'objectif ayant la distance la plus courte.
-		float previousDistance = actionneur.detectItem();
-		float sensorDistance = previousDistance;
+		Capteurs.getInstance().initUltrasonicSensor();
+		Capteurs.getInstance().initTouchSensor();
+		float i = robotAction.detectItem(90, false);
+		robotAction.takeItem(i);
 		
-		//Avancer jusqu'a l'objet compris entre 0.32 et infini
-		if( previousDistance >= sensorDistance && sensorDistance > 0.32f ) {
-			System.out.println("allow");
-			actionneur.avancer( (previousDistance+0.2f) * 1000.0f );
-			sensorDistance = actionneur.getCapteurs().getDistance();
-		}
 		
-		while( previousDistance >= sensorDistance && sensorDistance > 0.35f ) {
-			System.out.println(previousDistance);
-			System.out.println(sensorDistance);
-			previousDistance = sensorDistance;
-			sensorDistance = actionneur.getCapteurs().getDistance();
-		}
+//		System.out.println("Start Posi");
+//		boolean doChoice = true;
+//		int choice = -1;
+//		while (doChoice) {
+//			if(Button.ENTER.isDown()) {
+//				System.out.println("pas encore mec");
+//				choice = 0;
+////				choice = false;
+//			}
+//			else if(Button.LEFT.isDown()) {
+//				choice = 1;
+//				doChoice = false;
+//			}
+//			else if(Button.RIGHT.isDown()) {
+//				choice = 2;
+//				doChoice = false;
+//			}
+//		}
+//		
+//		//foncer
+//		battleStates.firstGoal();
+//		
+//		switch (choice) {
+//			case 0 :
+//				//pas encore
+//				break;
+//			case 1 :
+//				battleStates.secondGoal(false);
+//				break;
+//			case 2 :
+//				battleStates.secondGoal(true);
+//				break;
+//		}
 		
-		if(sensorDistance < 0.35f && sensorDistance > 0.32f) {;
-			boolean stop = true;
-			while(stop && actionneur.getChassis().isMoving()) {
-				if(actionneur.getCapteurs().buttonIsPressed()) {
-					stop = false;
-					Pasgrandchose = true;
-					actionneur.attraper();
-				}
-			}
-		}
-
-		actionneur.getChassis().stop();
-		actionneur.getChassis().waitComplete();
-		if(Pasgrandchose) {
-			actionneur.lacher();
-		}
 	    Button.ENTER.waitForPressAndRelease();
-	   	
 	}
 
 }

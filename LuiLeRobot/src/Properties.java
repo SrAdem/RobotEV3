@@ -35,7 +35,7 @@ public interface Properties{
 		/**
 		 * La vitesse Max.
 		 */
-		public static float MAX_SPEED = 160.0f;
+		public static float MAX_SPEED = Float.MAX_VALUE;
 		/**
 		 * La vitesse Min.
 		 */
