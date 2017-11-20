@@ -5,7 +5,7 @@ import lejos.robotics.chassis.Chassis;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 
-public class Actionneurs implements Properties{
+public class Actionneurs implements RienDuTout{
 	private Wheel left_Motor;
 	private Wheel right_Motor;
 	private NXTRegulatedMotor plier;

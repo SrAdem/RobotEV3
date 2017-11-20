@@ -1,5 +1,5 @@
 
-public class ActionRobot implements Properties{
+public class ActionRobot implements RienDuTout{
 
 	private Actionneurs actionneurs;
 	private Capteurs capteurs;

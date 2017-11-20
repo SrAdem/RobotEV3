@@ -5,7 +5,7 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.SampleProvider;
 
-public class Capteurs implements Properties {
+public class Capteurs implements RienDuTout {
 	private EV3TouchSensor button = null;
 	private EV3ColorSensor colorSensor = null;
 	private EV3UltrasonicSensor usSensor = null;
@@ -60,7 +60,7 @@ public class Capteurs implements Properties {
     	return this.distanceSample[0];
     }
     
-    public void getColor() {} //get color a faire
+    public void getColor() {} //TODO : get color a faire
 	
 	public EV3TouchSensor getButton() {
 		return this.button;

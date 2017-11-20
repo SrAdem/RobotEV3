@@ -1,5 +1,5 @@
 
-public class BattleStates implements Properties {
+public class BattleStates implements RienDuTout {
 	private ActionRobot robotActions;
 	private Actionneurs actionneurs;
 	private Capteurs capteurs;
@@ -51,6 +51,7 @@ public class BattleStates implements Properties {
 		this.robotActions.takeItem(distance);
 	}
 	
-	
-	
+	public void goToGoal() {
+		//TODO : trouver notre camp.
+	}
 }

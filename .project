@@ -3,7 +3,6 @@
 	<name>RobotEV3</name>
 	<comment></comment>
 	<projects>
-		<project>LuiLeRobot</project>
 	</projects>
 	<buildSpec>
 	</buildSpec>
