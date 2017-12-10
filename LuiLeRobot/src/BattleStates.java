@@ -1,7 +1,3 @@
-import java.util.ArrayList;
-
-import lejos.hardware.port.MotorPort;
-
 public class BattleStates implements RobotSpec {
 	private RobotActions robotActions;
 	private Actuators actuators;

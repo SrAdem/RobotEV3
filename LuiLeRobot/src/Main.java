@@ -1,8 +1,3 @@
-import java.io.IOException;
-import java.util.Properties;
-
-import com.sun.corba.se.impl.orb.ParserTable.TestContactInfoListFactory;
-
 import lejos.hardware.Button;
 
 public class Main implements RobotSpec{
@@ -25,7 +20,7 @@ public class Main implements RobotSpec{
 		}
 		
 		
-		//foncer
+		//rush
 		battleStates.firstGoal();
 		
 		switch (choice) {
