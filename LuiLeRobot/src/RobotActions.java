@@ -1,5 +1,21 @@
 import java.util.ArrayList;
 
+/**
+ * Objectifs : spécifie les différentes actions que le robot peut effectuera.
+ * 
+ * Relations : implémente l'interface RobotSpec.
+ * 
+ * Classes utilisées par RobotActions : Actuators, Sensors et ArrayList.
+ * 
+ * Classes utilisant RobotActions : BattleStates.
+ * 
+ * Définitions des attributs: 	actuators de type Actuators représente tous les actionneurs du robot,
+ * 								sensors de type Sensors représente tous les capteurs du robot.
+ * 
+ * Procédures externes : 	rotate(), run(), stop(), firstTake(), take(), halfTake(), release(), halfRelease(), pliersRepostion(),
+ * 							putAndReposition(), detectColor(), float detectItem (float angle, boolean withPosi), takeItem() et getDetectedLineColor().
+ */
+
 public class RobotActions implements RobotSpec{
 
 	private Actuators actuators;
@@ -25,6 +41,9 @@ public class RobotActions implements RobotSpec{
 	public void run(float distance) {
 		this.actuators.getChassis().travel(distance);
 	}
+	/**
+	 * Stop moving.
+	 */
 	public void stop() {
 		this.actuators.getChassis().stop();
 		this.actuators.getChassis().waitComplete();

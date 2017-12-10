@@ -1,3 +1,21 @@
+/**
+ * Objectifs : spécifie les différentes étapes durant une confrontation.
+ * 
+ * Relations : implémente l'interface RobotSpec.
+ * 
+ * Classes utilisées par BattleStates : RobotActions, Actuators et Sensors.
+ * 
+ * Classes utilisant BattleStates : Main.
+ * 
+ * Définitions des attributs: 	actuators de type Actuators représente tous les actionneurs du robot,
+ * 								sensors de type Sensors représente tous les capteurs du robot,
+ * 								robotAction de type RobotActions représente les actions réalisables du robot et
+ * 								rotateOrNot de type boolean est vrai si le robot doit faire demi-tour.
+ * 
+ * Procédures externes : start(), firstGoal(), secondGoal(boolean startAt), allGoal(), goToGoal() et takeItemOrdBack(float distance).
+ *
+ */
+
 public class BattleStates implements RobotSpec {
 	private RobotActions robotActions;
 	private Actuators actuators;
@@ -54,7 +72,10 @@ public class BattleStates implements RobotSpec {
 		//aller chercher
 		this.takeItemOrdBack(distance);
 	}
-	
+	/**
+	 * Search a puck, then take it and bring it to the delimited area.
+	 * 
+	 */
 	public void allGoal() throws InterruptedException {
 		if(this.rotateOrNot) {
 			this.robotActions.rotate(180);
@@ -64,7 +85,9 @@ public class BattleStates implements RobotSpec {
 		float distance = this.robotActions.detectItem(90, true);
 		this.takeItemOrdBack(distance);
 	}
-	
+	 /**
+	  * Bring the puck to the delimited area.
+	  */
 	public void goToGoal() {
 		this.actuators.getChassis().setLinearSpeed(NRM_SPEED);
 		this.robotActions.rotate(180);
@@ -78,7 +101,10 @@ public class BattleStates implements RobotSpec {
 		this.actuators.getChassis().setLinearSpeed(MAX_SPEED);
 		this.robotActions.putAndReposition();
 	}
-	
+	/**
+	 * If the puck is taken, do goToGoal(), else back.
+	 * 
+	 */
 	private void takeItemOrdBack(float distance) {
 		boolean itemIsPuck = this.robotActions.takeItem(distance);
 		if(itemIsPuck) {

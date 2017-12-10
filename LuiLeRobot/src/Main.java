@@ -1,5 +1,20 @@
 import lejos.hardware.Button;
 
+/**
+ * Objectif : lancer le robot selon la position de départ et enclencher le programme.
+ * 
+ * Relations : implémente RobotSpec.
+ * 
+ * Classes utilisées par Main : BattleStates.
+ * 
+ * Classes utilisant Main : aucune.
+ * 
+ * Définitions des attributs: 	battleStates de type BattleStates représentant les différents états possibles du robot lors du tournoi.
+ * 
+ * Procédures : aucune.
+ *
+ */
+
 public class Main implements RobotSpec{
 
 	public static void main(String[] args) throws InterruptedException {

@@ -1,4 +1,5 @@
 import java.io.FileInputStream;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -8,6 +9,28 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.Color;
 import lejos.robotics.filter.MeanFilter;
+
+/**
+ * Objectifs : enregistre les différentes couleurs qui doivent être détectées par le capteur couleur.
+ * 
+ * Relations : étend EV3ColorSensor et implémente l'interface RobotSpec.
+ * 
+ * Classes utilisées par ColorSensors : MeanFilte, Properties et TableColor.
+ * 
+ * Classes utilisant ColorSensors : Sensors.
+ * 
+ * Définitions des attributs: 	blue de type tableau de float représente toutes les valeurs de la couleur bleue, 
+ * 								red de type tableau de float représente toutes les valeurs de la couleur rouge, 
+ *								green de type tableau de float représente toutes les valeurs de la couleur verte, 
+ * 								yellow de type tableau de float représente toutes les valeurs de la couleur jaune, 
+ * 								black de type tableau de float représente toutes les valeurs de la couleur noire, 
+ * 								grey de type tableau de float représente toutes les valeurs de la couleur grise, 
+ * 								white de type tableau de float représente toutes les valeurs de la couleur, 
+ * 								average de type MeanFilter permettant de prélever la couleur courante et
+ * 								properties de type Properties permettant de créer un fichier contenant les couleurs.
+ * 
+ * Procédures externes : 	calibrateColor() et testColor().
+ */
 
 public class ColorSensor extends EV3ColorSensor implements RobotSpec{
 
@@ -22,8 +45,9 @@ public class ColorSensor extends EV3ColorSensor implements RobotSpec{
 	private MeanFilter average;
 	private Properties properties;
 
+	//TODO 
 	private float[] path_color;
-    private final double ERROR = 0.01;
+    private final double ERROR = 0.01; 
 	
 	public ColorSensor(Port p) {
 		super(p);
