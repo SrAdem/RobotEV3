@@ -5,6 +5,26 @@ import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.NXTTouchSensor;
 import lejos.robotics.chassis.Chassis;
 
+/**
+ * -Objectif: "Variable global" permettant de limité les modifications juste aux attributs présent dans l'interface 
+ * plutot que de modifier ou insérer des valeurs bruts.
+ * -Cette classe est implémenté par toutes les classes utilisant les variables présent dans la classe (Ici : Toute les classes).
+ * -La classe utilise la librairie LeJos, Motor / NXTRegulatedMotor / Chassis pour les moteurs et Port pour les port du robot.
+ * -Les attribut :
+ * 		-ECART_C_R de type float : la distance entre le centre du chassi et les roues.
+ * 		-R_MOTOR de type NXTRegulatedMotor : le port du moteur droit.
+ * 		-L_MOTOR de type NXTRegulatedMotor : le port du moteur gauche.
+ * 		-PLIER_MOTOR de type NXTRegulatedMotor : le port de la pince.
+ * 		-IR_SENSOR de type Port : le port du capteur ultrason.
+ * 		-BUTTON_SENSOR de type Port : le port du bouton.
+ * 		-COLOR_SENSOR de type Port : le port du capteur de couleur
+ * 		-MAX_SPEED de type float : la vitesse maximal des moteurs.
+ * 		-NRM_SPEED de type flaot : la vitesse normal des moteurs.
+ * 		-MIN_SPEED de type flaot : la vitesse minumal des moteurs.
+ * 		-NB_ECH de type int : nombre d'échantillonage lors du prélèvement des couleurs de la table.
+ * 		-FILE_P de type String : le nom du fichier contenant les vecteurs des couleurs.
+ *
+ */
 public interface RobotSpec{	
 	/**
 	 * 
