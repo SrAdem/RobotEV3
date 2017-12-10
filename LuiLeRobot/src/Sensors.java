@@ -1,26 +1,26 @@
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3IRSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.SampleProvider;
 
-public class Capteurs implements RienDuTout {
+public class Sensors implements RienDuTout {
 	private EV3TouchSensor button = null;
-	private EV3ColorSensor colorSensor = null;
+	private ColorSensor colorSensor = null;
 	private EV3UltrasonicSensor usSensor = null;
 	private SampleProvider distance;
 	private float[] distanceSample;
 
-	private static Capteurs INSTANCE = null;
+	private static Sensors INSTANCE = null;
 
-	public Capteurs() {
+	public Sensors() {
 	}
 	
-	public void initCapteurs() {
+	/**
+	 * Initialization of all sensors.
+	 */
+	public void initSensors() {
 		if (this.button == null && this.colorSensor == null && this.usSensor == null) {
 			this.button = new EV3TouchSensor(BUTTON_SENSOR);
-			this.colorSensor = new EV3ColorSensor(COLOR_SENSOR);
+			this.colorSensor = new ColorSensor(COLOR_SENSOR);
 			this.usSensor = new EV3UltrasonicSensor(IR_SENSOR);
 			
 			this.distance = this.usSensor.getMode("Distance");
@@ -28,18 +28,27 @@ public class Capteurs implements RienDuTout {
 		}
 	}
 	
+	/**
+	 * Initialization of touchSensor.
+	 */
 	public void initTouchSensor() {
 		if (this.button == null) {
 			this.button = new EV3TouchSensor(BUTTON_SENSOR);
 		}
 	}
 	
+	/**
+	 * Initialization of colorSensor.
+	 */
 	public void initColorSensor() {
 		if (this.colorSensor == null) {
-			this.colorSensor = new EV3ColorSensor(COLOR_SENSOR);
+			this.colorSensor = new ColorSensor(COLOR_SENSOR);
 		}
 	}
 	
+	/**
+	 * Initialization of ultrasonicSensor..
+	 */
 	public void initUltrasonicSensor() {
 		if (this.usSensor == null) {
 			this.usSensor = new EV3UltrasonicSensor(IR_SENSOR);
@@ -47,11 +56,13 @@ public class Capteurs implements RienDuTout {
 			this.distanceSample = new float[this.distance.sampleSize()];
 		}
 	}
-
+	
+	/**
+	 * Initialization of the button.
+	 */
     public boolean buttonIsPressed() {
         float[] sample = new float[1];
         button.fetchSample(sample, 0);
-
         return sample[0] != 0;
     }
     
@@ -59,14 +70,12 @@ public class Capteurs implements RienDuTout {
     	this.distance.fetchSample(this.distanceSample, 0);
     	return this.distanceSample[0];
     }
-    
-    public void getColor() {} //TODO : get color a faire
 	
 	public EV3TouchSensor getButton() {
 		return this.button;
 	}
 	
-	public EV3ColorSensor getColorSensor() {
+	public ColorSensor getColorSensor() {
 		return this.colorSensor;
 	}
 
@@ -74,9 +83,9 @@ public class Capteurs implements RienDuTout {
 		return this.usSensor;
 	}
 	
-	public static Capteurs getInstance() {	
+	public static Sensors getInstance() {	
 		if(INSTANCE == null)
-			INSTANCE = new Capteurs();
+			INSTANCE = new Sensors();
 		return INSTANCE;
 	}
 }

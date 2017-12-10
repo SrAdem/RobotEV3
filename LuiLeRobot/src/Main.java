@@ -1,25 +1,29 @@
 import java.io.IOException;
 import java.util.Properties;
+
+import com.sun.corba.se.impl.orb.ParserTable.TestContactInfoListFactory;
+
 import lejos.hardware.Button;
 
 public class Main implements RienDuTout{
 
 	public static void main(String[] args) throws InterruptedException {
 		BattleStates battleStates = new BattleStates();
-		Properties properties = new Properties();
+//		RobotActions ra = new RobotActions();
+//		ColorSensor colorSensor = new ColorSensor(COLOR_SENSOR);
 		
-//		Debut(battleStates);
-
-		ColorSensor ColorSensor = new ColorSensor(COLOR_SENSOR);
-		try {
-			ColorSensor.loadProperties();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Debut(battleStates);
 		
-		ColorSensor.testColor();
-		
+//		colorSensor.calibrateColor();
+//		
+//		boolean essai = true;
+//		while(essai) {
+//			System.out.println(colorSensor.testColor().toString());
+//			Button.waitForAnyPress();
+//			if(Button.ESCAPE.isDown()) {
+//				essai = false;
+//			}
+//		}
 	    Button.ENTER.waitForPressAndRelease();
 	}
 
@@ -51,6 +55,13 @@ public class Main implements RienDuTout{
 			case 2 :
 				battleStates.secondGoal(true);
 				break;
+		}
+		int i=0;
+		
+		boolean catched = false;
+		while(i<50 || Button.ENTER.isDown()) {
+			i++;
+			battleStates.allGoal();
 		}
 	}
 

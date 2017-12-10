@@ -1,10 +1,6 @@
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Properties;
 
 import lejos.hardware.Button;
@@ -15,14 +11,18 @@ import lejos.robotics.filter.MeanFilter;
 
 public class ColorSensor extends EV3ColorSensor implements RienDuTout{
 
-	private String file;
 	private float[] blue;
 	private float[] red;
 	private float[] green;
 	private float[] yellow;
 	private float[] black;
+	private float[] grey;
+	private float[] white;
 	private MeanFilter average;
 	private Properties properties;
+
+	private float[] path_color;
+    private final double ERROR = 0.01;
 	
 	public ColorSensor(Port p) {
 		super(p);
@@ -30,103 +30,136 @@ public class ColorSensor extends EV3ColorSensor implements RienDuTout{
 		this.average = new MeanFilter(this.getRGBMode(), 1);
 		this.setFloodlight(Color.WHITE);
 		
-		this.blue = null;
-		this.red = null;
-		this.green = null;
-		this.yellow = null;
-		this.black = null;
+		this.blue = new float[this.average.sampleSize()];
+		this.red = new float[this.average.sampleSize()];
+		this.green = new float[this.average.sampleSize()];
+		this.yellow = new float[this.average.sampleSize()];
+		this.black = new float[this.average.sampleSize()];
+		this.grey = new float[this.average.sampleSize()];
+		this.white = new float[this.average.sampleSize()];
+				
+		if(this.properties.isEmpty()) {
+			try {
+				this.loadProperties();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
-	 * Calibrate different colors and save it in file (with Properties class)
+	 * Calibrate the different colors and save them in a file (with Properties class).
 	 */
+	
 	public void calibrateColor() {
 		float[] cpt = {0, 0, 0};
 		
-		float[] blue = null;
-		System.out.println("Press enter to calibrate blue...");
+		System.out.println("Press enter to calibrate " + TableColor.Blue.toString() + " :");
 		for(int i = 0 ; i < NB_ECH; i++) {
 			Button.ENTER.waitForPressAndRelease();
-			blue = new float[this.average.sampleSize()];
-			this.average.fetchSample(blue, 0);
+			this.blue = new float[this.average.sampleSize()];
+			this.average.fetchSample(this.blue, 0);
 			if(i == 0) {
-				cpt = blue;
+				cpt = this.blue;
 			}
 			else {
-				addTable(cpt, blue);
+				addTable(cpt, this.blue);
 			}
 		}
-		System.out.println("hey");
-		moyTable(cpt);		
-		addToProperties(this.properties, cpt, "blue");
-		System.out.println("yep");
+		meanTable(cpt);		
+		addAttributToProperties(cpt, TableColor.Blue.toString());
 		
-		float[] red = null;
-		System.out.println("Press enter to calibrate red...");
+		System.out.println("Press enter to calibrate " + TableColor.Red.toString() + " :");
 		for(int i = 0 ; i < NB_ECH; i++) {
 			Button.ENTER.waitForPressAndRelease();
-			red = new float[this.average.sampleSize()];
-			this.average.fetchSample(red, 0);
+			this.red = new float[this.average.sampleSize()];
+			this.average.fetchSample(this.red, 0);
 			if(i == 0) {
-				cpt = red;
+				cpt = this.red;
 			}
 			else {
-				addTable(cpt, red);
+				addTable(cpt, this.red);
 			}
 		}
-		moyTable(cpt);		
-		addToProperties(this.properties, cpt, "red");
+		meanTable(cpt);		
+		addAttributToProperties(cpt, TableColor.Red.toString());
 		
-		float[] green = null;
-		System.out.println("Press enter to calibrate green...");
+		System.out.println("Press enter to calibrate " + TableColor.Green.toString() + " :");
 		for(int i = 0 ; i < NB_ECH; i++) {
 			Button.ENTER.waitForPressAndRelease();
-			green = new float[this.average.sampleSize()];
-			this.average.fetchSample(green, 0);
+			this.green = new float[this.average.sampleSize()];
+			this.average.fetchSample(this.green, 0);
 			if(i == 0) {
-				cpt = green;
+				cpt = this.green;
 			}
 			else {
-				addTable(cpt, green);
+				addTable(cpt, this.green);
 			}
 		}
-		moyTable(cpt);		
-		addToProperties(this.properties, cpt, "green");
+		meanTable(cpt);		
+		addAttributToProperties(cpt, TableColor.Green.toString());
 
-		float[] yellow = null;
-		System.out.println("Press enter to calibrate yellow...");
+		System.out.println("Press enter to calibrate " + TableColor.Yellow.toString() + " :");
 		for(int i = 0 ; i < NB_ECH; i++) {
 			Button.ENTER.waitForPressAndRelease();
-			yellow = new float[this.average.sampleSize()];
-			this.average.fetchSample(yellow, 0);
+			this.yellow = new float[this.average.sampleSize()];
+			this.average.fetchSample(this.yellow, 0);
 			if(i == 0) {
-				cpt = yellow;
+				cpt = this.yellow;
 			}
 			else {
-				addTable(cpt, yellow);
+				addTable(cpt, this.yellow);
 			}
 		}
-		moyTable(cpt);		
-		addToProperties(this.properties, cpt, "yellow");
+		meanTable(cpt);		
+		addAttributToProperties(cpt, TableColor.Yellow.toString());
 		
-		float[] black = null;
-		System.out.println("Press enter to calibrate black...");
+		System.out.println("Press enter to calibrate " + TableColor.Black.toString() + " :");
 		for(int i = 0 ; i < NB_ECH; i++) {
 			Button.ENTER.waitForPressAndRelease();
-			black = new float[this.average.sampleSize()];
-			this.average.fetchSample(black, 0);
+			this.black = new float[this.average.sampleSize()];
+			this.average.fetchSample(this.black, 0);
 			if(i == 0) {
-				cpt = black;
+				cpt = this.black;
 			}
 			else {
-				addTable(cpt, black);
+				addTable(cpt, this.black);
 			}
 		}
-		moyTable(cpt);		
-		addToProperties(this.properties, cpt, "black");
+		meanTable(cpt);		
+		addAttributToProperties(cpt, TableColor.Black.toString());
 		
-		File file = null;
-		FileOutputStream sv = null;
+		System.out.println("Press enter to calibrate " + TableColor.Grey.toString() + " :");
+		for(int i = 0 ; i < NB_ECH; i++) {
+			Button.ENTER.waitForPressAndRelease();
+			this.grey = new float[this.average.sampleSize()];
+			this.average.fetchSample(this.grey, 0);
+			if(i == 0) {
+				cpt = this.grey;
+			}
+			else {
+				addTable(cpt, this.grey);
+			}
+		}
+		meanTable(cpt);		
+		addAttributToProperties(cpt, TableColor.Grey.toString());
+		
+		System.out.println("Press enter to calibrate " + TableColor.White.toString() + " :");
+		for(int i = 0 ; i < NB_ECH; i++) {
+			Button.ENTER.waitForPressAndRelease();
+			this.white = new float[this.average.sampleSize()];
+			this.average.fetchSample(this.white, 0);
+			if(i == 0) {
+				cpt = this.white;
+			}
+			else {
+				addTable(cpt, this.white);
+			}
+		}
+		meanTable(cpt);		
+		addAttributToProperties(cpt, TableColor.White.toString());
 		
 		try {
 			this.saveProperties();
@@ -138,109 +171,132 @@ public class ColorSensor extends EV3ColorSensor implements RienDuTout{
 	/**
 	 * Test Color.
 	 */
-	public void testColor() {
-		boolean again = true;
-		while (again) {
-			float[] sample = new float[this.average.sampleSize()];
-			System.out.println("\nPress enter to detect a color...");
-			Button.ENTER.waitForPressAndRelease();
-			this.average.fetchSample(sample, 0);
-			double minscal = Double.MAX_VALUE;
-			String color = "";
-			
-			double scalaire = scalaire(sample, this.blue);
-			//Button.ENTER.waitForPressAndRelease();
-			//System.out.println(scalaire);
-			if (scalaire < minscal) {
-				minscal = scalaire;
-				color = "blue";
-			}
-			
-			scalaire = scalaire(sample, this.red);
-			//System.out.println(scalaire);
-			//Button.ENTER.waitForPressAndRelease();
-			if (scalaire < minscal) {
-				minscal = scalaire;
-				color = "red";
-			}
-			
-			scalaire = scalaire(sample, this.green);
-			//System.out.println(scalaire);
-			//Button.ENTER.waitForPressAndRelease();
-			if (scalaire < minscal) {
-				minscal = scalaire;
-				color = "green";
-			}
-			
-			scalaire = scalaire(sample, this.yellow);
-			//System.out.println(scalaire);
-			//Button.ENTER.waitForPressAndRelease();
-			if (scalaire < minscal) {
-				minscal = scalaire;
-				color = "yellow";
-			}
-			
-			scalaire = scalaire(sample, this.black);
-			//System.out.println(scalaire);
-			//Button.ENTER.waitForPressAndRelease();
-			if (scalaire < minscal) {
-				minscal = scalaire;
-				color = "black";
-			}
-			
-			System.out.println("The color is " + color + " \n");
-			System.out.println("Press ENTER to continue \n");
-			System.out.println("ESCAPE to exit");
-			Button.waitForAnyPress();
-			if(Button.ESCAPE.isDown()) {
-				this.setFloodlight(false);
-				again = false;
-			}
+	public TableColor testColor() {
+		float[] sample = new float[this.average.sampleSize()];
+		this.average.fetchSample(sample, 0);
+		TableColor color = null;
+		
+		double minScal = Double.MAX_VALUE;
+		double scalar;
+		
+		scalar = scalar(sample, this.blue);
+		if (scalar < minScal) {
+			minScal = scalar;
+			color = TableColor.Blue;
 		}
-	}
-	
-	/**
-	 * Add the different values which the color can take.
-	 */
-	private void addToProperties(Properties properties, float[] cpt, String color) {
-		for (int i = 0; i < 3; i++) {
-			properties.setProperty(color + i, "" + cpt[i]);
+		
+		scalar = scalar(sample, this.red);
+		if (scalar < minScal) {
+			minScal = scalar;
+			color = TableColor.Red;
 		}
+		
+		scalar = scalar(sample, this.green);
+		if (scalar < minScal) {
+			minScal = scalar;
+			color = TableColor.Green;
+		}
+		
+		scalar = scalar(sample, this.yellow);
+		if (scalar < minScal) {
+			minScal = scalar;
+			color = TableColor.Yellow;
+		}
+		
+		scalar = scalar(sample, this.black);
+		if (scalar < minScal) {
+			minScal = scalar;
+			color = TableColor.Black;
+		}
+		
+		scalar = scalar(sample, this.grey);
+		if (scalar < minScal) {
+			minScal = scalar;
+			color = TableColor.Grey;
+		}
+		
+		scalar = scalar(sample, this.white);
+		if (scalar < minScal) {
+			minScal = scalar;
+			color = TableColor.White;
+		}
+		
+		return color;
 	}
 
-	private void addTable(float[] cpt, float[] blue) {
-		cpt[0] += blue[0];
-		cpt[1] += blue[1];
-		cpt[2] += blue[2];
+	private void addTable(float[] cpt, float[] color) {
+		cpt[0] += color[0];
+		cpt[1] += color[1];
+		cpt[2] += color[2];
 	}
 
-	/**
-	 * Mean
-	 */
-	private void moyTable(float[] cpt) {
+	private void meanTable(float[] cpt) {
 		cpt[0] = cpt[0] / cpt.length;
 		cpt[1] = cpt[1] / cpt.length;
 		cpt[2] = cpt[2] / cpt.length;
 	}
 
-	public double scalaire(float[] v1, float[] v2) {
+	public double scalar(float[] v1, float[] v2) {
 		return Math.sqrt (Math.pow(v1[0] - v2[0], 2.0) +
 				Math.pow(v1[1] - v2[1], 2.0) +
 				Math.pow(v1[2] - v2[2], 2.0));
 	}
 	
+	public void pathColor() {
+		this.path_color = new float[this.average.sampleSize()];
+		this.average.fetchSample(this.path_color, 0);
+	}
+    public boolean onPath()
+    {
+    	float[] sample = new float[average.sampleSize()];
+		average.fetchSample(sample, 0);
+		
+		double scalaire = this.scalar(sample, path_color);
+		System.out.println(scalaire < ERROR);
+		//Button.ENTER.waitForPressAndRelease();
+		
+		return this.scalar(sample, path_color) < ERROR;
+    }
+    
+	/**
+	 * Save colors/properties in a file.
+	 */
 	private void saveProperties()throws IOException
     {
             FileOutputStream fr=new FileOutputStream(FILE_P);
             this.properties.store(fr,"Properties");
             fr.close();
-            System.out.println("After saving properties:"+this.properties);
     }
 	
-    public void loadProperties()throws IOException
+	/**
+	 * Load colors/properties.
+	 * @throws InterruptedException 
+	 */
+    private void loadProperties()throws IOException, InterruptedException
     {
             this.properties.load(new FileInputStream(FILE_P));
-            System.out.println("After Loading properties:" + this.properties);
+			this.loadAttributOfProperties(this.blue, TableColor.Blue.toString());
+			this.loadAttributOfProperties(this.red, TableColor.Red.toString());
+			this.loadAttributOfProperties(this.green, TableColor.Green.toString());
+			this.loadAttributOfProperties(this.yellow, TableColor.Yellow.toString());
+			this.loadAttributOfProperties(this.black, TableColor.Black.toString());
+			this.loadAttributOfProperties(this.grey, TableColor.Grey.toString());
+			this.loadAttributOfProperties(this.white, TableColor.White.toString());
     }
+    
+	/**
+	 * Add the different values which the color can take.
+	 */
+	private void addAttributToProperties(float[] cpt, String color) {
+		for (int i = 0; i < 3; i++) {
+			this.properties.setProperty(color + i, "" + cpt[i]);
+		}
+	}
+	
+	private void loadAttributOfProperties(float[] color, String c) throws InterruptedException {
+		for (int i = 0; i < 3; i++) {
+			color[i] = Float.parseFloat(this.properties.getProperty(c+i));
+		}
+	}
 	
 }
