@@ -2,7 +2,7 @@ import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.SampleProvider;
 
-public class Sensors implements RienDuTout {
+public class Sensors implements RobotSpec {
 	private EV3TouchSensor button = null;
 	private ColorSensor colorSensor = null;
 	private EV3UltrasonicSensor usSensor = null;

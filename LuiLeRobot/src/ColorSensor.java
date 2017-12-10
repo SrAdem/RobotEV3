@@ -9,8 +9,9 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.Color;
 import lejos.robotics.filter.MeanFilter;
 
-public class ColorSensor extends EV3ColorSensor implements RienDuTout{
+public class ColorSensor extends EV3ColorSensor implements RobotSpec{
 
+	//TODO : private float[][] => factorisation + moins de lignes
 	private float[] blue;
 	private float[] red;
 	private float[] green;
@@ -52,7 +53,6 @@ public class ColorSensor extends EV3ColorSensor implements RienDuTout{
 	/**
 	 * Calibrate the different colors and save them in a file (with Properties class).
 	 */
-	
 	public void calibrateColor() {
 		float[] cpt = {0, 0, 0};
 		
@@ -236,27 +236,30 @@ public class ColorSensor extends EV3ColorSensor implements RienDuTout{
 		cpt[2] = cpt[2] / cpt.length;
 	}
 
-	public double scalar(float[] v1, float[] v2) {
+	private double scalar(float[] v1, float[] v2) {
 		return Math.sqrt (Math.pow(v1[0] - v2[0], 2.0) +
 				Math.pow(v1[1] - v2[1], 2.0) +
 				Math.pow(v1[2] - v2[2], 2.0));
 	}
 	
+	
+	//TODO : Line follower
 	public void pathColor() {
 		this.path_color = new float[this.average.sampleSize()];
 		this.average.fetchSample(this.path_color, 0);
 	}
     public boolean onPath()
     {
-    	float[] sample = new float[average.sampleSize()];
-		average.fetchSample(sample, 0);
+    	float[] sample = new float[this.average.sampleSize()];
+		this.average.fetchSample(sample, 0);
 		
-		double scalaire = this.scalar(sample, path_color);
-		System.out.println(scalaire < ERROR);
+		double scalaire = this.scalar(sample, this.path_color);
+		System.out.println(scalaire < this.ERROR);
 		//Button.ENTER.waitForPressAndRelease();
 		
-		return this.scalar(sample, path_color) < ERROR;
+		return this.scalar(sample, this.path_color) < this.ERROR;
     }
+    //end of todo
     
 	/**
 	 * Save colors/properties in a file.

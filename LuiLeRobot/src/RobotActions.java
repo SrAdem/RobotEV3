@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
-public class RobotActions implements RienDuTout{
+public class RobotActions implements RobotSpec{
 
 	private Actuators actuators;
 	private Sensors sensors;
-	private ArrayList<TableColor> detectedLineColor;
+	private ArrayList<TableColor> detectedLineColor; //TODO : lineFollower
 
 	public RobotActions() {
 		this.actuators = Actuators.getInstance();
@@ -73,6 +73,8 @@ public class RobotActions implements RienDuTout{
 	public TableColor detectColor() {
 		return this.sensors.getColorSensor().testColor();
 	}
+	
+	//TODO : pour lineFollower
 	public void detectedColor() {
 		TableColor color = this.detectColor();
 		if(color != TableColor.White && color != TableColor.Grey) {
@@ -90,6 +92,7 @@ public class RobotActions implements RienDuTout{
 			this.detectedLineColor.remove(color);
 		}
 	}
+	//fin du todo
 	
 	/**
 	 * Detect the object which is the closest of the robot.
@@ -119,7 +122,7 @@ public class RobotActions implements RienDuTout{
 		this.actuators.getChassis().setAngularSpeed(MIN_SPEED);
 		this.rotate(-angle);
 		
-		//positionnement face à l'objectif
+		//positionnement face ï¿½ l'objectif
 		while(this.actuators.getChassis().isMoving()) {
 			Thread.sleep(5);
 			float distance = this.sensors.getDistance();
@@ -174,6 +177,7 @@ public class RobotActions implements RienDuTout{
 		return itemIsPuck;
 	}
 	
+	//TODO : a dev
 	public void lineFollower() {
 		this.run(10000);
 		while(this.sensors.getColorSensor().onPath());

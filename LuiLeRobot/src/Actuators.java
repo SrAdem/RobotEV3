@@ -4,7 +4,7 @@ import lejos.robotics.chassis.Chassis;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 
-public class Actuators implements RienDuTout{
+public class Actuators implements RobotSpec{
 	private Wheel left_Motor;
 	private Wheel right_Motor;
 	private NXTRegulatedMotor plier;
@@ -15,7 +15,6 @@ public class Actuators implements RienDuTout{
 	/**
 	 * Initialization of all actuators.
 	 */
-	
 	public Actuators() {
 		this.left_Motor= WheeledChassis.modelWheel(L_MOTOR, 56).offset(-ECART_C_R);
 		this.right_Motor = WheeledChassis.modelWheel(R_MOTOR, 56).offset(ECART_C_R);

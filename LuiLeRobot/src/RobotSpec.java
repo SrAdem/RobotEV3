@@ -5,15 +5,11 @@ import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.NXTTouchSensor;
 import lejos.robotics.chassis.Chassis;
 
-public interface RienDuTout{
-
-	// initColor entre 4 et 5sec
-	// initBouton moins de 0.2 sec
-	
+public interface RobotSpec{	
 	/**
 	 * 
 	 */
-	public static float ECART_C_R = (float) 61.5; // écart entre l'épicentre et la roue.
+	public static float ECART_C_R = (float) 61.5; // ï¿½cart entre l'ï¿½picentre et la roue.
 	/**
 	 * Right motor.
 	 */
@@ -51,7 +47,7 @@ public interface RienDuTout{
 	 */
 	public static float MIN_SPEED = 60.0f;
 	/**
-	 * Nbr d'échantillons pour la couleur.
+	 * Nbr d'ï¿½chantillons pour la couleur.
 	 */
 	public static int NB_ECH = 4;
 	/**

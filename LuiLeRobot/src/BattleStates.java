@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 import lejos.hardware.port.MotorPort;
 
-public class BattleStates implements RienDuTout {
+public class BattleStates implements RobotSpec {
 	private RobotActions robotActions;
 	private Actuators actuators;
 	private Sensors sensors;	
@@ -28,10 +28,9 @@ public class BattleStates implements RienDuTout {
 	 * Run and take the first puck in front of the robot and bring it to the "zone".
 	 * Initialization of the ultrasonicSensor.
 	 */
-	
 	public void firstGoal() {
 		this.actuators.getChassis().setSpeed(MAX_SPEED, MAX_SPEED);
-		this.robotActions.run(2600);// TODO: a opti mais déja pas mal
+		this.robotActions.run(2600);// TODO: a opti mais dï¿½ja pas mal
 		this.robotActions.firstTake();
 		
 		this.sensors.initUltrasonicSensor();
@@ -62,14 +61,11 @@ public class BattleStates implements RienDuTout {
 	
 	public void allGoal() throws InterruptedException {
 		if(this.rotateOrNot) {
-//			System.out.println("rotate");
 			this.robotActions.rotate(180);
 		}
 
 		while(Actuators.getInstance().getChassis().isMoving());
-		System.out.println("detectItem");
 		float distance = this.robotActions.detectItem(90, true);
-		System.out.println("takeItem");
 		this.takeItemOrdBack(distance);
 	}
 	
@@ -79,19 +75,6 @@ public class BattleStates implements RienDuTout {
 		while(this.actuators.getChassis().isMoving());
 		this.robotActions.run(10000);
 		TableColor color = this.robotActions.detectColor();
-//		while(color != TableColor.Black && color != TableColor.White) {
-//			color = this.robotActions.detectColor();
-//		}
-//		this.robotActions.stop();
-//		if(color == TableColor.White) {
-//			this.robotActions.release();
-//		}
-//		else {
-//			this.sensors.getColorSensor().pathColor();
-//			while(this.robotActions.detectColor() != TableColor.White) {
-//				this.robotActions.lineFollower();
-//			}
-//		}
 		while(color != TableColor.White) {
 			color = this.robotActions.detectColor();
 		}

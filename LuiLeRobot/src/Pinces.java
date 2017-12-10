@@ -2,6 +2,7 @@ import lejos.hardware.Button;
 
 public class Pinces {
 
+	// Calibrer les pinces.
 	public static void main(String[] args) {
 		RobotActions ra = new RobotActions();
 		
